@@ -16,7 +16,9 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <FastLED.h>
+#include <FastLED.h>  // https://github.com/FastLED/FastLED
+#include <Button.h>   // https://github.com/madleech/Button
+
 FASTLED_USING_NAMESPACE
 
 #include "GradientPalettes.h"
@@ -35,8 +37,14 @@ CRGB leds[NUM_LEDS];
 
 const uint8_t brightnessCount = 5;
 uint8_t brightnessMap[brightnessCount] = { 16, 32, 64, 128, 255 };
-uint8_t brightnessIndex = 0;
+int8_t brightnessIndex = 0;
 uint8_t brightness = brightnessMap[brightnessIndex];
+
+const uint8_t PIN_BUTTON_PATTERN = 3;
+const uint8_t PIN_BUTTON_BRIGHTNESS = 2;
+
+Button buttonBrightness(2);
+Button buttonPattern(3);
 
 uint8_t power = 1;
 
@@ -70,7 +78,7 @@ CRGBPalette16 gTargetPalette( gGradientPalettes[0] );
 
 CRGBPalette16 IceColors_p = CRGBPalette16(CRGB::Black, CRGB::Blue, CRGB::Aqua, CRGB::White);
 
-uint8_t currentPatternIndex = 0; // Index number of which pattern is current
+int8_t currentPatternIndex = 0; // Index number of which pattern is current
 uint8_t autoplay = 1;
 
 uint8_t autoplayDuration = 10;
@@ -193,6 +201,23 @@ PatternList patterns = {
 
 const uint8_t patternCount = ARRAY_SIZE(patterns);
 
+void handleInput() {
+  if (buttonPattern.released())
+  {
+    Serial.println("Pattern button released");
+    if (autoplay) {
+      autoplay = 0;
+      Serial.println("Autoplay: off");
+    }
+    adjustPattern(true);
+  }
+
+  if (buttonBrightness.released()) {
+    Serial.println("Brightness button released");
+    adjustBrightness(true);
+  }
+}
+
 void setup() {
   Serial.begin(115200);
   delay(100);
@@ -208,11 +233,16 @@ void setup() {
   FastLED.setBrightness(brightness);
 
   autoPlayTimeout = millis() + (autoplayDuration * 1000);
+
+  buttonBrightness.begin();
+  buttonPattern.begin();
 }
 
 void loop() {
   // Add entropy to random number generator; we use a lot of it.
   random16_add_entropy(random(65535));
+
+  handleInput();
 
   if (power == 0) {
     fill_solid(leds, NUM_LEDS, CRGB::Black);
@@ -260,6 +290,30 @@ void adjustPattern(bool up)
     currentPatternIndex = patternCount - 1;
   if (currentPatternIndex >= patternCount)
     currentPatternIndex = 0;
+
+  Serial.print("pattern: ");
+  Serial.println(currentPatternIndex);
+}
+
+// increase or decrease the current brightness, and wrap around at the ends
+void adjustBrightness(bool up)
+{
+  if (up)
+    brightnessIndex++;
+  else
+    brightnessIndex--;
+
+  // wrap around at the ends
+  if (brightnessIndex < 0)
+    brightnessIndex = brightnessCount - 1;
+  if (brightnessIndex >= brightnessCount)
+    brightnessIndex = 0;
+
+  brightness = brightnessMap[brightnessIndex];
+  FastLED.setBrightness(brightness);
+
+  Serial.print("brightness: ");
+  Serial.println(brightness);
 }
 
 void strandTest()
