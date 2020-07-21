@@ -7,7 +7,7 @@ Source code: https://github.com/jasoncoon/fibonacci-demoreel
 
 More information on Fibonacci64: https://www.evilgeniuslabs.org/fibonacci64
 
-[![Image of Yaktocat](https://i.imgur.com/rzZu48F.gif)](https://www.evilgeniuslabs.org/fibonacci64)
+![Image of Fibonacci64](https://i.imgur.com/rzZu48F.gif)
 
 Hook LED data in to pin 4, or change `DATA_PIN`.
 
