@@ -23,7 +23,7 @@ FASTLED_USING_NAMESPACE
 
 #define ARRAY_SIZE(A) (sizeof(A) / sizeof((A)[0]))
 
-#define DATA_PIN      D5
+#define DATA_PIN      5
 #define LED_TYPE      WS2812B
 #define COLOR_ORDER   GRB
 #define NUM_LEDS      64
@@ -112,99 +112,83 @@ const CRGBPalette16 palettes[] = {
 
 const uint8_t paletteCount = ARRAY_SIZE(palettes);
 
-const String paletteNames[paletteCount] = {
-  "Rainbow",
-  "Rainbow Stripe",
-  "Cloud",
-  "Lava",
-  "Ocean",
-  "Forest",
-  "Party",
-  "Heat",
-};
-
 typedef void (*Pattern)();
 typedef Pattern PatternList[];
-typedef struct {
-  Pattern pattern;
-  String name;
-} PatternAndName;
-typedef PatternAndName PatternAndNameList[];
 
 #include "Twinkles.h"
 #include "TwinkleFOX.h"
 #include "Map.h"
-#include "Noise.h"
+//#include "Noise.h"
 
 // List of patterns to cycle through.  Each is defined as a separate function below.
 
-PatternAndNameList patterns = {
-//  { pride,                  "Pride" },
-  { prideFibonacci,         "Pride Fibonacci" },
-//  { colorWaves,             "Color Waves" },
-  { colorWavesFibonacci,    "Color Waves Fibonacci" },
+PatternList patterns = {
+//  pride,
+  prideFibonacci,
+//  colorWaves,
+  colorWavesFibonacci,
 
   // matrix patterns
-  { anglePalette,  "Angle Palette" },
-  { radiusPalette,  "Radius Palette" },
-  { xPalette,  "X Axis Palette" },
-  { yPalette,  "Y Axis Palette" },
-  { xyPalette, "XY Axis Palette" },
-  
-  { angleGradientPalette,  "Angle Gradient Palette" },
-  { radiusGradientPalette,  "Radius Gradient Palette" },
-  { xGradientPalette,  "X Axis Gradient Palette" },
-  { yGradientPalette,  "Y Axis Gradient Palette" },
-  { xyGradientPalette, "XY Axis Gradient Palette" },
+  anglePalette,
+  radiusPalette,
+  xPalette,
+  yPalette,
+  xyPalette,
 
-  // noise patterns
-  { fireNoise, "Fire Noise" },
-  { fireNoise2, "Fire Noise 2" },
-  { lavaNoise, "Lava Noise" },
-  { rainbowNoise, "Rainbow Noise" },
-  { rainbowStripeNoise, "Rainbow Stripe Noise" },
-  { partyNoise, "Party Noise" },
-  { forestNoise, "Forest Noise" },
-  { cloudNoise, "Cloud Noise" },
-  { oceanNoise, "Ocean Noise" },
-  { blackAndWhiteNoise, "Black & White Noise" },
-  { blackAndBlueNoise, "Black & Blue Noise" },
+  angleGradientPalette,
+  radiusGradientPalette,
+  xGradientPalette,
+  yGradientPalette,
+  xyGradientPalette,
+
+//  // noise patterns
+//  fireNoise,
+//  fireNoise2,
+//  lavaNoise,
+//  rainbowNoise,
+//  rainbowStripeNoise,
+//  partyNoise,
+//  forestNoise,
+//  cloudNoise,
+//  oceanNoise,
+//  blackAndWhiteNoise,
+//  blackAndBlueNoise,
 
   // twinkle patterns
-  { rainbowTwinkles,        "Rainbow Twinkles" },
-  { snowTwinkles,           "Snow Twinkles" },
-  { cloudTwinkles,          "Cloud Twinkles" },
-  { incandescentTwinkles,   "Incandescent Twinkles" },
+  rainbowTwinkles,
+  snowTwinkles,
+  cloudTwinkles,
+  incandescentTwinkles,
 
   // TwinkleFOX patterns
-  { retroC9Twinkles,        "Retro C9 Twinkles" },
-  { redWhiteTwinkles,       "Red & White Twinkles" },
-  { blueWhiteTwinkles,      "Blue & White Twinkles" },
-  { redGreenWhiteTwinkles,  "Red, Green & White Twinkles" },
-  { fairyLightTwinkles,     "Fairy Light Twinkles" },
-  { snow2Twinkles,          "Snow 2 Twinkles" },
-  { hollyTwinkles,          "Holly Twinkles" },
-  { iceTwinkles,            "Ice Twinkles" },
-  { partyTwinkles,          "Party Twinkles" },
-  { forestTwinkles,         "Forest Twinkles" },
-  { lavaTwinkles,           "Lava Twinkles" },
-  { fireTwinkles,           "Fire Twinkles" },
-  { cloud2Twinkles,         "Cloud 2 Twinkles" },
-  { oceanTwinkles,          "Ocean Twinkles" },
+  retroC9Twinkles,
+  redWhiteTwinkles,
+  blueWhiteTwinkles,
+  redGreenWhiteTwinkles,
+  fairyLightTwinkles,
+  snow2Twinkles,
+  hollyTwinkles,
+  iceTwinkles,
+  partyTwinkles,
+  forestTwinkles,
+  lavaTwinkles,
+  fireTwinkles,
+  cloud2Twinkles,
+  oceanTwinkles,
 
-  { rainbow,                "Rainbow" },
-  { rainbowWithGlitter,     "Rainbow With Glitter" },
-  { rainbowSolid,           "Solid Rainbow" },
-  { confetti,               "Confetti" },
-  { sinelon,                "Sinelon" },
-  { bpm,                    "Beat" },
-  { juggle,                 "Juggle" },
-  { fire,                   "Fire" },
-  { water,                  "Water" },
+  rainbow,
+  rainbowWithGlitter,
+  rainbowSolid,
+  confetti,
+  sinelon,
+  bpm,
+  juggle,
+  fire,
+  water,
 
-//  { strandTest,             "Strand Test" },
+//  strandTest,
 //
-//  { showSolidColor,         "Solid Color" }
+//  showSolidColor
 };
 
 const uint8_t patternCount = ARRAY_SIZE(patterns);
@@ -255,7 +239,7 @@ void loop() {
   }
 
   // Call the current pattern function once, updating the 'leds' array
-  patterns[currentPatternIndex].pattern();
+  patterns[currentPatternIndex]();
 
   FastLED.show();
 
