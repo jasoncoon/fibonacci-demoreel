@@ -17,7 +17,6 @@
 */
 
 #include <FastLED.h>  // https://github.com/FastLED/FastLED
-#include <Button.h>   // https://github.com/madleech/Button
 
 FASTLED_USING_NAMESPACE
 
@@ -25,7 +24,7 @@ FASTLED_USING_NAMESPACE
 
 #define ARRAY_SIZE(A) (sizeof(A) / sizeof((A)[0]))
 
-#define DATA_PIN      4
+#define DATA_PIN      A10
 #define LED_TYPE      WS2812B
 #define COLOR_ORDER   GRB
 #define NUM_LEDS      64
@@ -39,12 +38,6 @@ const uint8_t brightnessCount = 5;
 uint8_t brightnessMap[brightnessCount] = { 16, 32, 64, 128, 255 };
 int8_t brightnessIndex = 0;
 uint8_t brightness = brightnessMap[brightnessIndex];
-
-const uint8_t PIN_BUTTON_PATTERN = 3;
-const uint8_t PIN_BUTTON_BRIGHTNESS = 2;
-
-Button buttonBrightness(2);
-Button buttonPattern(3);
 
 uint8_t power = 1;
 
@@ -201,23 +194,6 @@ PatternList patterns = {
 
 const uint8_t patternCount = ARRAY_SIZE(patterns);
 
-void handleInput() {
-  if (buttonPattern.released())
-  {
-    Serial.println("Pattern button released");
-    if (autoplay) {
-      autoplay = 0;
-      Serial.println("Autoplay: off");
-    }
-    adjustPattern(true);
-  }
-
-  if (buttonBrightness.released()) {
-    Serial.println("Brightness button released");
-    adjustBrightness(true);
-  }
-}
-
 void setup() {
   Serial.begin(115200);
   delay(100);
@@ -233,16 +209,11 @@ void setup() {
   FastLED.setBrightness(brightness);
 
   autoPlayTimeout = millis() + (autoplayDuration * 1000);
-
-  buttonBrightness.begin();
-  buttonPattern.begin();
 }
 
 void loop() {
   // Add entropy to random number generator; we use a lot of it.
   random16_add_entropy(random(65535));
-
-  handleInput();
 
   if (power == 0) {
     fill_solid(leds, NUM_LEDS, CRGB::Black);
