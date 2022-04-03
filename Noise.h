@@ -1,6 +1,6 @@
 /*
    ESP8266 + FastLED: https://github.com/jasoncoon/esp8266-fastled-webserver
-   Copyright (C) 2015-2020 Jason Coon
+   Copyright (C) 2015-2022 Jason Coon
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by

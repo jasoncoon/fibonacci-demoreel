@@ -1,6 +1,6 @@
 /*
    Fibonacci Demo Reel: https://github.com/jasoncoon/fibonacci-demoreel
-   Copyright (C) 2020 Jason Coon
+   Copyright (C) 2022 Jason Coon
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,12 +24,12 @@ FASTLED_USING_NAMESPACE
 
 #define ARRAY_SIZE(A) (sizeof(A) / sizeof((A)[0]))
 
-#define DATA_PIN      A10
+#define DATA_PIN      A9
 #define LED_TYPE      WS2812B
-#define COLOR_ORDER   GRB
-#define NUM_LEDS      64
+#define COLOR_ORDER   RGB
+#define NUM_LEDS      128
 
-#define MILLI_AMPS         2000 // IMPORTANT: set the max milli-Amps of your power supply (4A = 4000mA)
+#define MILLI_AMPS         1600 // IMPORTANT: set the max milli-Amps of your power supply (4A = 4000mA)
 #define FRAMES_PER_SECOND  120  // here you can control the speed. With the Access Point / Web Server the animations run a bit slower.
 
 CRGB leds[NUM_LEDS];
@@ -74,7 +74,7 @@ CRGBPalette16 IceColors_p = CRGBPalette16(CRGB::Black, CRGB::Blue, CRGB::Aqua, C
 int8_t currentPatternIndex = 0; // Index number of which pattern is current
 uint8_t autoplay = 1;
 
-uint8_t autoplayDuration = 10;
+uint8_t autoplayDuration = 5;
 unsigned long autoPlayTimeout = 0;
 
 uint8_t showClock = 0;
@@ -130,11 +130,11 @@ PatternList patterns = {
   colorWavesFibonacci,
 
   // matrix patterns
-  anglePalette,
-  radiusPalette,
-  xPalette,
-  yPalette,
-  xyPalette,
+  // anglePalette,
+  // radiusPalette,
+  // xPalette,
+  // yPalette,
+  // xyPalette,
 
   angleGradientPalette,
   radiusGradientPalette,
@@ -155,37 +155,37 @@ PatternList patterns = {
 //  blackAndWhiteNoise,
 //  blackAndBlueNoise,
 
-  // twinkle patterns
-  rainbowTwinkles,
-  snowTwinkles,
-  cloudTwinkles,
-  incandescentTwinkles,
+  // // twinkle patterns
+  // rainbowTwinkles,
+  // snowTwinkles,
+  // cloudTwinkles,
+  // incandescentTwinkles,
 
-  // TwinkleFOX patterns
-  retroC9Twinkles,
-  redWhiteTwinkles,
-  blueWhiteTwinkles,
-  redGreenWhiteTwinkles,
-  fairyLightTwinkles,
-  snow2Twinkles,
-  hollyTwinkles,
-  iceTwinkles,
-  partyTwinkles,
-  forestTwinkles,
-  lavaTwinkles,
-  fireTwinkles,
-  cloud2Twinkles,
-  oceanTwinkles,
+  // // TwinkleFOX patterns
+  // retroC9Twinkles,
+  // redWhiteTwinkles,
+  // blueWhiteTwinkles,
+  // redGreenWhiteTwinkles,
+  // fairyLightTwinkles,
+  // snow2Twinkles,
+  // hollyTwinkles,
+  // iceTwinkles,
+  // partyTwinkles,
+  // forestTwinkles,
+  // lavaTwinkles,
+  // fireTwinkles,
+  // cloud2Twinkles,
+  // oceanTwinkles,
 
-  rainbow,
-  rainbowWithGlitter,
-  rainbowSolid,
-  confetti,
-  sinelon,
-  bpm,
-  juggle,
-  fire,
-  water,
+  // rainbow,
+  // rainbowWithGlitter,
+  // rainbowSolid,
+  // confetti,
+  // sinelon,
+  // bpm,
+  // juggle,
+  // fire,
+  // water,
 
 //  strandTest,
 //
@@ -241,8 +241,6 @@ void loop() {
 
   // Call the current pattern function once, updating the 'leds' array
   patterns[currentPatternIndex]();
-
-  FastLED.show();
 
   // insert a delay to keep the framerate modest
   FastLED.delay(1000 / FRAMES_PER_SECOND);
